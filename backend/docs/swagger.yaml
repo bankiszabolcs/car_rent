@@ -1,0 +1,937 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Car Rent API
+  description: Car Rent website to find your car
+servers:
+  - url: http://localhost:3000
+paths:
+  /login:
+    post:
+      description: Login to the page
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - username
+                - password
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        "200":
+          description: User logined successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - accessToken
+                  - refreshToken
+                  - minimalUser
+                properties:
+                  accessToken:
+                    type: string
+                  refreshToken:
+                    type: string
+                  minimalUser:
+                    type: object
+                    required:
+                      - username
+                      - role
+                      - user_id
+                    properties:
+                      username:
+                        type: string
+                      role:
+                        type: string
+                      user_id:
+                        type: string
+        "400":
+          description: Missing username/password or Not valid username/password
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /refresh:
+    post:
+      description: Refresh the login data
+      security:
+        - bearerAuth: []
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - refreshToken
+              properties:
+                refreshToken:
+                  type: string
+      responses:
+        "200":
+          description: User logined successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - accessToken
+                properties:
+                  accessToken:
+                    type: string
+        "400":
+          description: Missing or not valid refreshtoken
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /logout:
+    post:
+      description: Logout of the site
+      security:
+        - bearerAuth: []
+      tags:
+        - Auth
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - refreshToken
+              properties:
+                refreshToken:
+                  type: string
+      responses:
+        "200":
+          description: User logout successfully - Refresh token has been deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {}
+        "403":
+          description: No valid refresh token. Session expired
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /me:
+    post:
+      description: Check whether the user accessToken valid or not.
+      security:
+        - bearerAuth: []
+      tags:
+        - Auth
+      responses:
+        "200":
+          description: It gives back the user logged in
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - username
+                  - role
+                  - user_id
+                properties:
+                  username:
+                    type: string
+                  role:
+                    type: string
+                  user_id:
+                    type: string
+  /users:
+    get:
+      description: Returns a list of users
+      security:
+        - bearerAuth: []
+      tags:
+        - Users
+      responses:
+        "200":
+          description: List of users returned successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      description: Creates a new user
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "201":
+          description: New user saved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /users/{_id}:
+    get:
+      description: Returns one user by ID
+      security:
+        - bearerAuth: []
+      tags:
+        - Users
+      parameters:
+        - name: _id
+          in: path
+          required: true
+          description: The ID of the user to return
+          schema:
+            type: string
+      responses:
+        "200":
+          description: User data returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "400":
+          description: The specified userID is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: User with the given ID was not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      description: Update a user
+      security:
+        - bearerAuth: []
+      tags:
+        - Users
+      parameters:
+        - name: _id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "201":
+          description: User updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      description: Delete a user
+      security:
+        - bearerAuth: []
+      tags:
+        - Users
+      parameters:
+        - in: path
+          name: _id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: User has been deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {}
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /users/emailUsed:
+    post:
+      description: Check the email if it is valid or not
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+              required:
+                - email
+            example:
+              email: johndoe@gmail.com
+      responses:
+        "200":
+          description: Its response contains whether the email is free or not
+          content:
+            application/json:
+              schema:
+                type: boolean
+                example: true
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /users/usernameUsed:
+    post:
+      description: Check the username if it is valid or not
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+              required:
+                - username
+            example:
+              username: johndoe11
+      responses:
+        "200":
+          description: Its response contains whether the username is free or not
+          content:
+            application/json:
+              schema:
+                type: boolean
+                example: true
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /users/checkPassword:
+    post:
+      description: Check the user's password if it is correct or not
+      tags:
+        - Users
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: string
+                password:
+                  type: string
+              required:
+                - id
+                - password
+            example:
+              id: 643546c67e0decaa58cfd636
+              password: bestPassword12.
+      responses:
+        "200":
+          description: Its response contains whether the password is correct or not
+          content:
+            application/json:
+              schema:
+                type: boolean
+                example: true
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /cars:
+    get:
+      description: Returns a list of cars
+      tags:
+        - Cars
+      responses:
+        "200":
+          description: List of cars returned successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      description: Creates a new car
+      security:
+        - bearerAuth: []
+      tags:
+        - Cars
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Car"
+      responses:
+        "201":
+          description: New car saved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Car"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /cars/{_id}:
+    get:
+      description: Returns one car by ID
+      tags:
+        - Cars
+      parameters:
+        - name: _id
+          in: path
+          required: true
+          description: The ID of the car to return
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Car data returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Car"
+        "400":
+          description: The specified carID is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Car with the given ID was not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      description: Update a car
+      security:
+        - bearerAuth: []
+      tags:
+        - Cars
+      parameters:
+        - name: _id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Car"
+      responses:
+        "201":
+          description: User updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Car"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      description: Delete a car
+      security:
+        - bearerAuth: []
+      tags:
+        - Cars
+      parameters:
+        - in: path
+          name: _id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Car has been deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {}
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /orders:
+    get:
+      description: Returns a list of orders
+      tags:
+        - Orders
+      responses:
+        "200":
+          description: List of orders returned successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      description: Creates a new order
+      security:
+        - bearerAuth: []
+      tags:
+        - Orders
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Order"
+      responses:
+        "201":
+          description: New order saved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /orders/{_id}:
+    get:
+      description: Returns one order by ID
+      tags:
+        - Orders
+      parameters:
+        - name: _id
+          in: path
+          required: true
+          description: The ID of the orders to return
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Order data returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "400":
+          description: The specified orderID is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Order with the given ID was not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    put:
+      description: Update an order
+      security:
+        - bearerAuth: []
+      tags:
+        - Orders
+      parameters:
+        - name: _id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Order"
+      responses:
+        "201":
+          description: Order updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      description: Delete an order
+      security:
+        - bearerAuth: []
+      tags:
+        - Orders
+      parameters:
+        - in: path
+          name: _id
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Order has been deleted successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                example: {}
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /orders/user/{userId}:
+    get:
+      description: Returns the order('s) of a user
+      tags:
+        - Orders
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          description: The ID of the user who wants to know his/her orders
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Orders' data returned successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order"
+        "400":
+          description: One or more specified orderID is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: User hasn't got orders.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    User:
+      type: object
+      required:
+        - email
+        - username
+        - password
+        - firstName
+        - lastName
+        - birthDate
+        - phone
+        - personalId
+        - drivingLicense
+        - address
+      properties:
+        email:
+          type: string
+          format: email
+          example: johndoe@gmail.com
+        username:
+          type: string
+          example: JohnDoe
+        password:
+          type: string
+        firstName:
+          type: string
+          example: John
+        lastName:
+          type: string
+          example: Doe
+        birthDate:
+          type: string
+          example: 2011-10-05T14:48:00.000Z
+          format: date-time
+        phone:
+          type: string
+          example: +36204306300
+        personalId:
+          type: string
+          example: 232412TA
+        drivingLicense:
+          type: string
+          example: CM045543
+        address:
+          $ref: "#/components/schemas/Address"
+        orders:
+          type: array
+          items:
+            type: string
+        favourites:
+          type: array
+          items:
+            type: string
+        roles:
+          type: string
+          example: user
+    Address:
+      type: object
+      required:
+        - city
+        - street
+        - houseNumber
+        - zip
+      properties:
+        city:
+          type: string
+          example: Budapest
+        street:
+          type: string
+          example: Kossuth Lajos
+        houseNumber:
+          type: number
+          example: 11
+        floor:
+          type: number
+          example: 11
+        flatNumber:
+          type: number
+          example: 11
+        zip:
+          type: number
+          example: 1114
+    Car:
+      type: object
+      required:
+        - make
+        - model
+        - price
+        - fuel
+        - year
+        - transmission
+        - features
+        - discount
+        - available
+      properties:
+        make:
+          type: string
+          example: Opel
+        model:
+          type: string
+          example: Astra
+        price:
+          type: number
+          example: 11000
+        fuel:
+          type: string
+          example: gasoline
+        year:
+          type: number
+          example: 2020
+        transmission:
+          type: string
+          example: automatic
+        features:
+          $ref: "#/components/schemas/Features"
+        discount:
+          type: boolean
+          example: true
+        available:
+          type: boolean
+          example: true
+    Features:
+      type: object
+      required:
+        - color
+        - bodyStyle
+        - numberOfDoors
+        - numberOfSeats
+        - powerHp
+        - cubicCapacity
+        - fuelConsumption
+        - airCondition
+      properties:
+        color:
+          type: string
+          example: green
+        bodyStyle:
+          type: string
+          example: SUV
+        numberOfDoors:
+          type: number
+          example: 5
+        numberOfSeats:
+          type: number
+          example: 5
+        powerHp:
+          type: number
+          example: 100
+        cubicCapacity:
+          type: number
+          example: 1467
+        fuelConsumption:
+          type: number
+          example: 6
+        airCondition:
+          type: boolean
+          example: true
+    Order:
+      type: object
+      required:
+        - date
+        - startDate
+        - endDate
+        - userId
+        - carId
+      properties:
+        date:
+          type: string
+          example: 2011-10-05T14:48:00.000Z
+          format: date-time
+        startDate:
+          type: string
+          example: 2011-10-05T14:48:00.000Z
+          format: date-time
+        endDate:
+          type: number
+          example: 2011-10-05T14:48:00.000Z
+          format: date-time
+        duration:
+          type: number
+          example: 1
+        price:
+          type: number
+          example: 10000
+        userId:
+          type: string
+          example: 1
+        carId:
+          type: string
+          example: 1
+    Error:
+      type: object
+      required:
+        - message
+        - has_error
+      properties:
+        message:
+          type: string
+        has_error:
+          type: boolean

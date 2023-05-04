@@ -1,0 +1,26 @@
+<mat-toolbar color="primary">
+  <div class="footer__container" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="space-around" fxLayoutGap="10px">
+    <div class="footer__left">
+      <mat-list>
+        <mat-list-item><a [routerLink]="['/']">Főoldal</a></mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item><a [routerLink]="['cars']">Autóink</a></mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item><a [routerLink]="['faq']">Gyakran ismételt kérdések</a></mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item><a [routerLink]="['contact']">Kapcsolat</a></mat-list-item>
+      </mat-list>
+    </div>
+    <div class="footer__right">
+      <mat-list>
+        <mat-list-item><p fxLayout="row" fxLayoutAlign="star center"><mat-icon fontIcon="home"></mat-icon> 1234 Autokölcsönző utca 44.</p></mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item><p fxLayout="row" fxLayoutAlign="star center"><mat-icon fontIcon="call"></mat-icon> +36-20/550-6572</p></mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item><p fxLayout="row" fxLayoutAlign="star center"><mat-icon fontIcon="mail"></mat-icon> info@superautokolcsonzo.com</p></mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item><p fxLayout="row" fxLayoutAlign="star center"><mat-icon fontIcon="schedule"></mat-icon> H-SZ 8:00-16:00</p></mat-list-item>
+      </mat-list>
+    </div>
+  </div>
+</mat-toolbar>

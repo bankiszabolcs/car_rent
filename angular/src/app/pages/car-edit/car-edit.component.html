@@ -1,0 +1,102 @@
+<div class="container" *ngIf="dataArrived">
+  <p>
+    <mat-toolbar>
+      <span *ngIf="!newCarMode">{{carFormGroup.get(['make'])?.value | name }} {{carFormGroup.get(['model'])?.value | name}} szerkesztése </span>
+      <span *ngIf="newCarMode">Új autó szerkesztése</span>
+    </mat-toolbar>
+  </p>
+  <form fxLayout="column" [formGroup]="carFormGroup" (ngSubmit)="onSave()">
+    <div class="form-control" fxLayout.lt-sm="column" fxLayoutGap="10px" fxLayout="row wrap" fxLayoutAlign="space-between">
+      <mat-form-field appearance="fill" >
+        <mat-label>Márka</mat-label>
+        <mat-select formControlName="make" [value]="carFormGroup.get(['make'])?.value">
+          <mat-option *ngFor="let make of carOptions.make" [value]="make.value">{{ make.key }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill" >
+        <mat-label>Modell</mat-label>
+        <mat-select formControlName="model" [value]="carFormGroup.get(['model'])?.value">
+          <mat-option *ngFor="let model of actualModel" [value]="model.value">{{ model.key }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Ár</mat-label>
+        <input matInput placeholder="20000" type="number" formControlName="price">
+        <mat-error *ngIf="carFormGroup.controls['price'].invalid">Mezőt kötelező megadni</mat-error>
+      </mat-form-field>
+    </div>
+    <div class="form-control" fxLayout.lt-sm="column" fxLayoutGap="10px" fxLayout="row wrap" fxLayoutAlign="space-between">
+      <mat-form-field appearance="fill" >
+        <mat-label>Üzemanyag</mat-label>
+        <mat-select formControlName="fuel" [value]="carFormGroup.get(['fuel'])?.value">
+          <mat-option *ngFor="let fuel of carOptions.fuel" [value]="fuel.value">{{ fuel.key }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Évjárat</mat-label>
+        <input matInput placeholder="2010" type="number" formControlName="year">
+         <mat-error *ngIf="carFormGroup.controls['year'].invalid">Mezőt kötelező megadni</mat-error>
+         <mat-error *ngIf="carFormGroup.controls['year'].hasError('min')">Minimum érték: 1960</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="fill" >
+        <mat-label>Váltó</mat-label>
+        <mat-select formControlName="transmission" [value]="carFormGroup.get(['transmission'])?.value">
+          <mat-option *ngFor="let transmission of carOptions.transmission" [value]="transmission.value">{{ transmission.key }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <div class="form-group" formGroupName="features">
+      <div class="form-control" fxLayout.lt-sm="column" fxLayoutGap="10px" fxLayout="row wrap" fxLayoutAlign="space-between">
+        <mat-form-field appearance="fill" fxFlex="20%" >
+          <mat-label>Szín</mat-label>
+          <mat-select  formControlName="color" [value]="this.carFormGroup.get(['features'])?.value.color">
+            <mat-option *ngFor="let color of carOptions.color" [value]="color.value">{{ color.key }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill" fxFlex="20%" >
+          <mat-label>Kivitel</mat-label>
+          <mat-select  formControlName="bodyStyle" [value]="this.carFormGroup.get(['features'])?.value.bodyStyle">
+            <mat-option *ngFor="let bodyStyle of carOptions.bodyStyle" [value]="bodyStyle.value">{{ bodyStyle.key }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill" fxFlex="20%">
+          <mat-label>Ajtók</mat-label>
+          <input matInput placeholder="5" type="number" formControlName="numberOfDoors">
+          <mat-error *ngIf="carFormGroup.controls['features'].controls['numberOfDoors'].invalid">Mezőt kötelező megadni</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill" fxFlex="20%">
+          <mat-label>Ülések</mat-label>
+          <input matInput placeholder="5" type="number" formControlName="numberOfSeats">
+          <mat-error *ngIf="carFormGroup.controls['features'].controls['numberOfSeats'].invalid">Mezőt kötelező megadni</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="form-control" fxLayout.lt-sm="column" fxLayoutGap="10px" fxLayout="row wrap" fxLayoutAlign="space-between">
+        <mat-form-field appearance="fill" fxFlex="20%">
+          <mat-label>Teljesítmény</mat-label>
+          <input matInput placeholder="100" type="number" formControlName="powerHp">
+          <mat-error *ngIf="carFormGroup.controls['features'].controls['numberOfDoors'].invalid">Mezőt kötelező megadni</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill" fxFlex="20%">
+          <mat-label>Hengerűrtartalom</mat-label>
+          <input matInput placeholder="1989" type="number" formControlName="cubicCapacity">
+          <mat-error *ngIf="carFormGroup.controls['features'].controls['cubicCapacity'].invalid">Mezőt kötelező megadni</mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill" fxFlex="20%">
+          <mat-label>Fogyasztás</mat-label>
+          <input matInput placeholder="5" type="number" formControlName="fuelConsumption">
+          <mat-error *ngIf="carFormGroup.controls['features'].controls['fuelConsumption'].invalid">Mezőt kötelező megadni</mat-error>
+        </mat-form-field>
+
+        <mat-checkbox [value]="this.carFormGroup.get(['features'])?.value.airCondition" formControlName="airCondition" class="example-margin" color="primary">Légkondicionáló</mat-checkbox>
+      </div>
+    </div>
+    <div class="form-control" fxLayout.lt-sm="column" fxLayoutGap="10px" fxLayout="row wrap" fxLayoutAlign="center">
+      <mat-checkbox formControlName="discount" class="example-margin" color="primary">Akciós</mat-checkbox>
+      <mat-checkbox formControlName="available" class="example-margin" color="primary">Elérhető</mat-checkbox>
+    </div>
+    <div fxLayout fxLayoutGap="5px" fxLayoutAlign="center" >
+      <button [disabled]="!carFormGroup.valid" type="submit" mat-flat-button color="primary"><mat-icon aria-hidden="false">save</mat-icon>Mentés</button>
+      <button [routerLink]="['..']" mat-stroked-button><mat-icon aria-hidden="false">undo</mat-icon>Vissza</button>
+    </div>
+  </form>
+</div>

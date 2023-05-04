@@ -1,0 +1,114 @@
+{
+  "users": [
+    {
+      "email": "bankiszabolcs@yahoo.com",
+      "username": "bankiszabolcs",
+      "password": "asd123456789",
+      "firstName": "Szabolcs",
+      "lastName": "Bánki",
+      "birthDate": "Thu Mar 16 1994 10:59:39 GMT+0100 (közép-európai téli idő)",
+      "phone": "06-20-131-4353",
+      "personalId": "233747ZA",
+      "drivingLicense": "323TAT33",
+      "address": {
+        "city": "Budapest",
+        "street": "Fehérvári",
+        "houseNumber": 22,
+        "floor": 1,
+        "flatNumber": 77,
+        "zip": 1211
+      },
+      "role": "admin",
+      "orders": [],
+      "favourites": []
+    },
+    {
+      "email": "szervac09@yahoo.com",
+      "username": "attilaki",
+      "password": "42e4ffc1",
+      "firstName": "Attila",
+      "lastName": "Pataki",
+      "birthDate": "Thu Oct 16 1955 10:59:39 GMT+0100 (közép-európai téli idő)",
+      "phone": "06-30-0976-703",
+      "personalId": "233747ZA",
+      "drivingLicense": "323TAT33",
+      "address": {
+        "city": "Szeged",
+        "street": "Kossuth Lajos",
+        "houseNumber": 22,
+        "floor": 1,
+        "flatNumber": 33,
+        "zip": 5001
+      },
+      "role": "user",
+      "orders": [],
+      "favourites": []
+    },
+    {
+      "email": "gyongyver@gmail.com",
+      "username": "gyongyi12",
+      "password": "patyolat1",
+      "firstName": "Gyöngyvér",
+      "lastName": "Nagy",
+      "birthDate": "Thu Mar 16 1967 10:59:39 GMT+0100 (közép-európai téli idő)",
+      "phone": "06-30-0976-703",
+      "personalId": "233747ZA",
+      "drivingLicense": "323TAT33",
+      "address": {
+        "city": "Szolnok",
+        "street": "Pozsonyi",
+        "houseNumber": 22,
+        "floor": 1,
+        "flatNumber": 10,
+        "zip": 4330
+      },
+      "role": "user",
+      "orders": [],
+      "favourites": []
+    },
+    {
+      "email": "meszarosD@gmail.com",
+      "username": "meszi12",
+      "password": "asdfghjkl1",
+      "firstName": "Dániel",
+      "lastName": "Mészáros",
+      "birthDate": "Thu Mar 16 2000 10:59:39 GMT+0100 (közép-európai téli idő)",
+      "phone": "06-30-0976-703",
+      "personalId": "233747ZA",
+      "drivingLicense": "323TAT33",
+      "address": {
+        "city": "Abony",
+        "street": "Szolnoki",
+        "houseNumber": 22,
+        "floor": 1,
+        "flatNumber": 10,
+        "zip": 5030
+      },
+      "role": "user",
+      "orders": [],
+      "favourites": []
+    },
+    {
+      "email": "aladar@gmail.com",
+      "username": "aladar@gmail.com",
+      "password": "asdsad232",
+      "firstName": "Aladár",
+      "lastName": "Horváth",
+      "birthDate": "Thu Mar 16 2002 10:59:39 GMT+0100 (közép-európai téli idő)",
+      "phone": "06-70-0332-703",
+      "personalId": "233747ZA",
+      "drivingLicense": "323TAT33",
+      "address": {
+        "city": "Tata",
+        "street": "Csörsz",
+        "houseNumber": 22,
+        "floor": 1,
+        "flatNumber": 112,
+        "zip": 3003
+      },
+      "role": "user",
+      "orders": [],
+      "favourites": []
+    }
+  ]
+}

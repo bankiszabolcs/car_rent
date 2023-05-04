@@ -1,0 +1,8 @@
+<app-spinner-overlay *ngIf="isLoading" [overlay]="true">
+</app-spinner-overlay>
+<div class="container">
+  <mat-toolbar>
+    <span>Rendelések</span>
+  </mat-toolbar>
+  <app-order-table (orderRemoved)="renderOrders()" [dataSource]="dataSource"></app-order-table>
+</div>

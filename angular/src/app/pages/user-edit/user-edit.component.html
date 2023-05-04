@@ -1,0 +1,179 @@
+<div class="container">
+  <p>
+    <mat-toolbar fxLayout="row" fxLayoutAlign="space-between center">
+      <span>{{ userFormGroup.controls['firstName'].value }} adatai</span>
+      <span>
+        <button mat-icon-button [matTooltip]="user?.role === 'admin'? 'Legyen csak felhasználó': 'Legyen admin' " color="primary" *ngIf="userLogged.role === 'admin'" (click)="onStatusChange()">
+          <mat-icon *ngIf="user?.role === 'user'">admin_panel_settings</mat-icon>
+          <mat-icon *ngIf="user?.role === 'admin'">no_accounts</mat-icon>
+        </button>
+        <button [routerLink]="['/orders', 'user', user?._id]" mat-icon-button color="primary" mat-icon [matTooltip]="user?.username + ' foglalásai'">
+          <mat-icon>receipt_long</mat-icon>
+        </button>
+      </span>
+    </mat-toolbar>
+  </p>
+  <form [formGroup]="userFormGroup" class="example-form" fxLayout="column" fxLayoutAlign="center">
+    <mat-form-field class="example-full-width">
+      <mat-label>ID</mat-label>
+      <input [readonly]="true" formControlName="_id" matInput [attr.disabled]="true">
+    </mat-form-field>
+    <div class="form-control" fxLayout.lt-sm="column" fxLayoutGap="10px" fxLayout="row wrap" fxLayoutAlign="center">
+      <mat-form-field class="example-full-width">
+        <mat-label>Keresztnév</mat-label>
+        <input formControlName="firstName" matInput [readonly]="true">
+          </mat-form-field>
+      <mat-form-field class="example-full-width">
+        <mat-label>Vezetéknév</mat-label>
+        <input formControlName="lastName" matInput [readonly]="true">
+      </mat-form-field>
+      <mat-form-field>
+        <input
+          matInput
+          placeholder="Születési idő"
+          [matDatepicker]="picker"
+          [max]="maxDate"
+          formControlName="birthDate"
+          required>
+        <mat-datepicker-toggle
+          matSuffix
+          [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngIf="userFormGroup.controls['birthDate'].hasError('required')">Mezőt kötelező megadni!</mat-error>
+      </mat-form-field>
+      <button  #tooltip="matTooltip"
+      matTooltip="Szolgáltatás igénybevételének feltétele a betöltött 18. életév"
+      [matTooltipShowDelay]="200"
+      [matTooltipHideDelay]="200" mat-icon-button color="primary" aria-label="Help icon">
+        <mat-icon>help</mat-icon>
+      </button>
+    </div>
+    <div class="form-control" fxLayout.lt-sm="column" fxLayoutGap="10px" fxLayout="row wrap" fxLayoutAlign="center">
+      <mat-form-field class="example-full-width">
+        <mat-label>Felhasználónév</mat-label>
+        <input formControlName="username" matInput [readonly]="true">
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+        <mat-label>Email</mat-label>
+        <input formControlName="email" [readonly]="true"
+        matInput>
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+        <mat-label>Telefon</mat-label>
+        <input formControlName="phone" placeholder="+36203310223" matInput>
+        <mat-error *ngIf="userFormGroup.controls['phone'].hasError('required')">Mezőt kötelező megadni!</mat-error>
+        <mat-error *ngIf="userFormGroup.controls['phone'].hasError('pattern')">Helyes megadási formátum: +36204205600</mat-error>
+      </mat-form-field>
+    </div>
+    <form [formGroup]="changePasswordForm">
+      <mat-checkbox color="primary" style="text-align: center;" formControlName="changePassword">Jelszót is változtatok</mat-checkbox>
+    </form>
+    <div class="form-control passwordContainer" fxLayout.lt-sm="column" fxLayoutGap="10px" fxLayout="row wrap" fxLayoutAlign="center">
+      <mat-form-field class="example-full-width">
+        <mat-label>Régi jelszó</mat-label>
+        <input [readonly]="!changePassword" type="password" placeholder="bestPassword34!" formControlName="oldPassword"  matInput>
+           <mat-error *ngIf="userFormGroup.controls['oldPassword'].hasError('required')">Mezőt kötelező megadni!</mat-error>
+           <mat-error *ngIf="userFormGroup.controls['oldPassword'].hasError('invalidPassword')">Érvénytelen jelszó</mat-error>
+          </mat-form-field>
+      <mat-form-field class="example-full-width" >
+        <mat-label>Új Jelszó</mat-label>
+        <input [readonly]="!changePassword" type="password" placeholder="bestPassword34!" formControlName="password"  #password matInput>
+        <mat-hint align="end"> {{ password.value.length>8? 8 : password.value.length}} / 8</mat-hint>
+        <mat-error *ngIf="userFormGroup.controls['password'].hasError('required')">Mezőt kötelező megadni!</mat-error>
+      <mat-error *ngIf="userFormGroup.controls['password'].hasError('pattern')">Rossz formátum!</mat-error>
+    </mat-form-field>
+      <mat-form-field class="example-full-width">
+        <mat-label>Új Jelszó</mat-label>
+        <input [readonly]="!changePassword" type="password" placeholder="bestPassword34!" formControlName="confirmPassword" matInput>
+        <mat-error *ngIf="userFormGroup.controls['confirmPassword'].hasError('required')">Mezőt kötelező megadni!</mat-error>
+        <mat-error *ngIf="userFormGroup.hasError('notSame')">Új jelszóknak egyezniük kell!</mat-error>
+      </mat-form-field>
+      <button  #tooltip="matTooltip"
+      matTooltip="Legalább 8 karakterből állónak kell lennie, amiből minimum 1-1 kis- és nagybetű, szám és speciális karakter."
+      [matTooltipShowDelay]="200"
+      [matTooltipHideDelay]="200" mat-icon-button color="primary" aria-label="Help icon">
+        <mat-icon>help</mat-icon>
+      </button>
+    </div>
+    <div class="form-control" fxLayout.lt-sm="column" fxLayoutGap="10px" fxLayout="row wrap" fxLayoutAlign="center">
+      <mat-form-field class="example-full-width">
+        <mat-label>Személyigazolvány</mat-label>
+        <input formControlName="personalId" matInput type="text"
+        placeholder="212004TA">
+        <mat-error *ngIf="userFormGroup.controls['personalId'].hasError('required')">Mezőt kötelező megadni!</mat-error>
+        <mat-error
+        *ngIf="userFormGroup.controls['personalId'].hasError('minlength')
+        || userFormGroup.controls['personalId'].hasError('maxlength') "
+        >Személyigazolvány számának 5-10 karakter között kell lennie! </mat-error>
+
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+        <mat-label>Jogosítvány</mat-label>
+        <input formControlName="drivingLicense" matInput  type="text"
+        placeholder="121441TA">
+        <mat-error *ngIf="userFormGroup.controls['drivingLicense'].hasError('required')">Mezőt kötelező megadni!</mat-error>
+        <mat-error
+        *ngIf="userFormGroup.controls['drivingLicense'].hasError('minlength')
+        || userFormGroup.controls['drivingLicense'].hasError('maxlength') "
+        >Jogosítvány számának 5-10 karakter között kell lennie! </mat-error>
+
+      </mat-form-field>
+    </div>
+    <div formGroupName="address">
+    <div class="form-control"  fxLayout.lt-sm="column" fxLayoutGap="10px" fxLayout="row wrap" fxLayoutAlign="center">
+      <mat-form-field class="example-full-width">
+        <mat-label>Irányítószám</mat-label>
+        <input formControlName="zip" placeholder="1115" type="number" matInput>
+        <mat-error *ngIf="userFormGroup.controls['address'].get(['zip'])?.hasError('required')">Mezőt kötelező megadni!</mat-error>
+
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+        <mat-label>Város</mat-label>
+        <input formControlName="city" matInput type="text"
+        placeholder="Budapest">
+        <mat-error *ngIf="userFormGroup.controls['address'].get(['city'])?.hasError('required')">Mezőt kötelező megadni!</mat-error>
+        <mat-error
+        *ngIf="userFormGroup.controls['address'].get(['city'])?.hasError('minlength')
+        || userFormGroup.controls['address'].get(['city'])?.hasError('maxlength') "
+        >Városnak 5-20 karakter között kell lennie! </mat-error>
+
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+        <mat-label>Út/Utca</mat-label>
+        <input formControlName="street" matInput type="text"
+        placeholder="Kossuth Lajos">
+        <mat-error *ngIf="userFormGroup.controls['address'].get(['street'])?.hasError('required')">Mezőt kötelező megadni!</mat-error>
+        <mat-error
+        *ngIf="userFormGroup.controls['address'].get(['street'])?.hasError('minlength')
+        || userFormGroup.controls['address'].get(['street'])?.hasError('maxlength') "
+        >Utcának 5-40 karakter között kell lennie! </mat-error>
+
+      </mat-form-field>
+    </div>
+    <div class="form-control" fxLayout.lt-sm="column" fxLayoutGap="10px" fxLayout="row wrap" fxLayoutAlign="center">
+      <mat-form-field class="example-full-width">
+        <mat-label>Házszám</mat-label>
+        <input formControlName="houseNumber" matInput type="number"
+        placeholder="22">
+        <mat-error *ngIf="userFormGroup.controls['address'].get(['houseNumber'])?.hasError('required')">Mezőt kötelező megadni!</mat-error>
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+        <mat-label>Emelet</mat-label>
+        <input formControlName="floor" matInput type="number"
+        placeholder="1">
+        <mat-hint align="end">*Nem kötelező megadni</mat-hint>
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+        <mat-label>Ajtó</mat-label>
+        <input formControlName="flatNumber"  type="number"
+        placeholder="98" matInput>
+        <mat-hint align="end">*Nem kötelező megadni</mat-hint>
+      </mat-form-field>
+    </div>
+  </div>
+    <div fxLayout fxLayoutGap="3px" fxLayoutAlign="center" >
+      <button (click)="onSave()" [disabled]="!userFormGroup.valid" type="submit" mat-flat-button color="primary"><mat-icon aria-hidden="false">save</mat-icon>Mentés</button>
+      <button (click)="onBack()" routerLinkActive="router-link-active"  mat-stroked-button><mat-icon aria-hidden="false">undo</mat-icon>Mégse</button>
+    </div>
+  </form>
+</div>

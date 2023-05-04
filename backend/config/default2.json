@@ -1,0 +1,14 @@
+{
+  "port": 3000,
+  "log_level_file": "debug",
+  "log_level_console": "info",
+  "cors": {
+    "origin": "http://localhost:4200",
+    "methods": ["POST", "PUT", "OPTIONS", "GET", "DELETE"]
+  },
+  "database": {
+    "user": "bankiszabolcs",
+    "password": "hl4Pfnj8Gac8PnFt",
+    "host": "mongo:27017/car_rent?retryWrites=true&w=majority"
+  }
+}

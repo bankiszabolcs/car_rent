@@ -1,0 +1,42 @@
+<mat-nav-list>
+  <div class="menu__item" fxLayout="row" fxLayoutAlign="start center" *ngIf="!user" mat-list-item routerLink="/signup" (click)="onClose()">
+    <mat-icon aria-hidden="false">app_registration</mat-icon>
+    <span class="navlist__item">Regisztráció</span>
+  </div>
+  <div class="menu__item" fxLayout="row" fxLayoutAlign="start center" *ngIf="!user" mat-list-item routerLink="/login" (click)="onClose()">
+    <mat-icon aria-hidden="false">login</mat-icon>
+    <span class="navlist__item">Bejelentkezés</span>
+  </div>
+  <div class="menu__item" fxLayout="row" fxLayoutAlign="start center"  *ngIf="user?.role === 'admin' || user?.role === 'user'" mat-list-item routerLink="/personals"  (click)="onClose()">
+    <mat-icon aria-hidden="false">settings</mat-icon>
+    <span class="navlist__item">Személyes</span>
+  </div>
+  <div class="menu__item" fxLayout="row" fxLayoutAlign="start center" *ngIf=" user?.role === 'admin'"  mat-list-item routerLink="/orders"  (click)="onClose()">
+    <mat-icon aria-hidden="false">book</mat-icon>
+    <span class="navlist__item">Foglalások</span>
+  </div>
+  <div class="menu__item" fxLayout="row" fxLayoutAlign="start center" *ngIf=" user?.role === 'user'"  [routerLink]="['orders','user', user?.user_id]" mat-list-item  (click)="onClose()">
+    <mat-icon aria-hidden="false">book</mat-icon>
+    <span class="navlist__item">Foglalásaim</span>
+  </div>
+  <div class="menu__item" fxLayout="row" fxLayoutAlign="start center" *ngIf="user?.role === 'admin'" mat-list-item routerLink="/users"  (click)="onClose()">
+    <mat-icon aria-hidden="false">group</mat-icon>
+    <span class="navlist__item">Felhasználók</span>
+  </div>
+  <div class="menu__item" fxLayout="row" fxLayoutAlign="start center" mat-list-item routerLink="/cars"  (click)="onClose()">
+    <mat-icon aria-hidden="false">directions_car</mat-icon>
+    <span class="navlist__item">Autóink</span>
+  </div>
+  <div class="menu__item" fxLayout="row" fxLayoutAlign="start center" mat-list-item routerLink="/contact" (click)="onClose()">
+    <mat-icon aria-hidden="false">alternate_email</mat-icon>
+    <span class="navlist__item">Elérhetőség</span>
+  </div>
+  <div class="menu__item" fxLayout="row" fxLayoutAlign="start center" mat-list-item routerLink="/faq" (click)="onClose()">
+    <mat-icon >quiz</mat-icon>
+    <span class="navlist__item">GYIK</span>
+  </div>
+  <div *ngIf="user" class="menu__item" fxLayout="row" fxLayoutAlign="start center" mat-list-item routerLink="/faq" (click)="onLogout()">
+    <mat-icon >logout</mat-icon>
+    <span class="navlist__item">Kijelentkezés</span>
+  </div>
+</mat-nav-list>

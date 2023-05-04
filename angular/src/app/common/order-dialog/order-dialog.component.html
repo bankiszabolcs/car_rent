@@ -1,0 +1,28 @@
+<h1 mat-dialog-title>Autófoglalás</h1>
+<div mat-dialog-content>
+  <form [formGroup]="orderForm" fxLayout="column">
+  <mat-form-field appearance="fill">
+    <mat-label>Add meg az időszakot</mat-label>
+    <mat-date-range-input [rangePicker]="picker" [min]="maxDate">
+      <input formControlName="startDate" matStartDate  placeholder="Kezdés">
+      <input formControlName="endDate" matEndDate  placeholder="Vége">
+    </mat-date-range-input>
+    <mat-hint>YYYY/MM/DD – YYYY/MM/DD</mat-hint>
+    <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-date-range-picker #picker></mat-date-range-picker>
+  </mat-form-field>
+  <mat-form-field class="example-full-width">
+    <mat-label>Összesen:</mat-label>
+    <input  [readonly]="true" matInput [value]="duration">
+  </mat-form-field>
+  <mat-form-field class="example-full-width">
+    <mat-label>Összeg:</mat-label>
+    <input [readonly]="true" matInput [value]="price">
+    <mat-hint>{{ dataToOrder.car.price }} Ft/nap</mat-hint>
+  </mat-form-field>
+</form>
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Bezár</button>
+  <button [disabled]="orderForm.invalid" mat-button (click)="onBook()" mat-dialog-close>Foglal</button>
+</div>

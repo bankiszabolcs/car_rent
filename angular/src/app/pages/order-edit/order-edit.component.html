@@ -1,0 +1,50 @@
+<div class="container">
+  <p>
+    <mat-toolbar>
+      <span>Foglalás szerkesztése</span>
+    </mat-toolbar>
+  </p>
+  <form [formGroup]="orderFormGroup" class="example-form" fxLayout="column" fxLayoutAlign="center">
+    <div class="form-control" fxLayout.lt-sm="column" fxLayoutGap="10px" fxLayout="row wrap" fxLayoutAlign="center">
+      <mat-form-field class="example-full-width">
+        <mat-label>ID</mat-label>
+        <input [readonly]="true" formControlName="_id" matInput>
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+        <mat-label>Autó</mat-label>
+        <input [readonly]="true" formControlName="carId" matInput>
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+        <mat-label>Dátum</mat-label>
+        <input [readonly]="true" formControlName="date" matInput >
+      </mat-form-field>
+    </div>
+    <div class="form-control" fxLayout.lt-sm="column" fxLayoutGap="10px" fxLayout="row wrap" fxLayoutAlign="center">
+      <mat-form-field appearance="fill">
+        <mat-label>Adj meg az időszakot</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+          <input matInput formControlName="startDate" matStartDate placeholder="Kezdés" required>
+          <input matInput formControlName="endDate" matEndDate placeholder="Vége" required>
+        </mat-date-range-input>
+        <mat-hint>YYYY/MM/DD – YYYY/MM/DD</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker" ></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+    </div>
+    <div class="form-control" fxLayout.lt-sm="column" fxLayoutGap="10px" fxLayout="row wrap" fxLayoutAlign="center">
+      <mat-form-field class="example-full-width">
+        <mat-label>Időtartam</mat-label>
+        <input [readonly]="true" formControlName="duration" type="number"  matInput>
+      </mat-form-field>
+      <mat-form-field class="example-full-width">
+        <mat-label>Ár</mat-label>
+        <input [readonly]="true" type="number" formControlName="price" matInput>
+        <mat-hint>{{ carOrdered.price }} Ft/nap</mat-hint>
+      </mat-form-field>
+    </div>
+    <div fxLayout fxLayoutGap="3px" fxLayoutAlign="center" >
+      <button (click)="onSave()" [disabled]="!orderFormGroup.valid" type="submit" mat-flat-button color="primary"><mat-icon aria-hidden="false">save</mat-icon>Mentés</button>
+      <button (click)="onBack()" mat-stroked-button><mat-icon aria-hidden="false">undo</mat-icon>Vissza</button>
+    </div>
+  </form>
+</div>

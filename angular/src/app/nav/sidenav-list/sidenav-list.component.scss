@@ -1,0 +1,32 @@
+a {
+  text-decoration: none;
+  color: white;
+
+  &:hover,
+  &:active {
+    color: lightgray;
+  }
+}
+
+.menu__item {
+  padding-left: 1rem;
+  font-size: larger;
+  font-weight: 500;
+  padding: 0.5rem 0.5rem 0.5rem 0.8rem;
+}
+
+.navlist__item {
+  display: inline-block;
+  padding-left: 0.8rem;
+}
+
+.example-sidenav-content {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.example-sidenav {
+  padding: 20px;
+}

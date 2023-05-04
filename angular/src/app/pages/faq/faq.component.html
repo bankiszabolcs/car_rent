@@ -1,0 +1,19 @@
+<mat-toolbar>
+  <span>Gyakran ismételt kérdések</span>
+</mat-toolbar>
+<mat-list *ngFor="let row of data; let i = index; let last = last">
+  <mat-list-item >
+    <input type="checkbox" [id]="'arrow'+i" #question ngModel>
+    <label  [for]="'arrow'+i" fxLayout="row" fxLayoutAlign="start center" style="margin-bottom: 1rem;">
+   <mat-icon *ngIf="!question.checked" fontIcon="keyboard_arrow_right"></mat-icon>
+      <mat-icon *ngIf="question.checked" fontIcon="keyboard_arrow_down"></mat-icon>
+     <span class="question">{{ row.question }}</span>
+    </label>
+  </mat-list-item>
+  <mat-list-item *ngIf="question.checked">
+    <p style="padding-left: 2rem;">{{ row.answer }}</p>
+  </mat-list-item>
+  <mat-divider></mat-divider>
+</mat-list>
+
+

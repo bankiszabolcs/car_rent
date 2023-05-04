@@ -1,0 +1,73 @@
+.card {
+  max-width: 300px;
+  margin: 1rem;
+}
+
+mat-card-header {
+  position: relative;
+}
+
+.card__icon-discount {
+  position: absolute;
+  right: 10px;
+}
+
+.details__list {
+  list-style: none;
+  padding: 0.5rem;
+
+  span {
+    font-weight: bolder;
+  }
+}
+
+.card__action--right {
+  font-weight: bold;
+  text-decoration: underline;
+  margin: auto 0;
+  padding: 0 0.2rem;
+}
+
+.highlight-container,
+.highlight {
+  position: relative;
+}
+
+.highlight-container {
+  display: inline-block;
+}
+.highlight-container:before {
+  content: " ";
+  display: block;
+  height: 90%;
+  width: 95%;
+  margin-left: -3px;
+  margin-right: -3px;
+  position: absolute;
+  background: #ffd500;
+  transform: rotate(2deg);
+  top: -1px;
+  left: -1px;
+  border-radius: 20% 25% 20% 24%;
+  padding: 10px 3px 3px 8px;
+}
+
+.notAvailable:before {
+  content: " ";
+  display: block;
+  height: 90%;
+  width: 95%;
+  margin-left: -3px;
+  margin-right: -3px;
+  position: absolute;
+  background: red;
+  transform: rotate(2deg);
+  top: -1px;
+  left: -1px;
+  border-radius: 20% 25% 20% 24%;
+  padding: 10px 3px 3px 8px;
+}
+
+mat-slider {
+  max-width: 300px;
+}

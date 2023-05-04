@@ -1,0 +1,49 @@
+<app-spinner-overlay *ngIf="isLoading" [overlay]="true">
+</app-spinner-overlay>
+<div class="container">
+  <mat-toolbar>
+    <span>Felhasználók</span>
+  </mat-toolbar>
+<div class="demo-button-container" fxLayout.sm="column" fxLayout.gt-sm="row">
+  <button mat-raised-button routerLink="/signup" class="action-button">
+    Új felhasználó
+  </button>
+  <button
+      mat-raised-button
+      (click)="removeData()"
+      class="action-button">
+    Felhasználók törlése
+  </button>
+</div>
+<div class="tableContainer mat-elevation-z8">
+<table mat-table [dataSource]="dataSource" class="table">
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? toggleAllRows() : null"
+                      [checked]="selection.hasValue() && isAllSelected()"
+                      [indeterminate]="selection.hasValue() && !isAllSelected()"
+                      [aria-label]="checkboxLabel()">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()"
+                      (change)="$event ? selection.toggle(row) : null"
+                      [checked]="selection.isSelected(row)"
+                      [aria-label]="checkboxLabel(row)">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+  <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">
+    <th mat-header-cell *matHeaderCellDef>
+      {{column.header}}
+    </th>
+    <td mat-cell *matCellDef="let row">
+      {{ column.columnDef === 'birthDate'? (column.cell(row) | date) : column.cell(row)}}
+    </td>
+  </ng-container>
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr [routerLink]="[row._id]" mat-row *matRowDef="let row; columns: displayedColumns;"
+   ></tr>
+</table>
+</div>
+</div>

@@ -1,0 +1,4 @@
+<div class="container" fxLayout="row">
+  <mat-icon *ngIf="user.role === 'admin'" (click)="onDelete(car)" color="accent" style="cursor: pointer;">delete</mat-icon>
+  <mat-icon *ngIf="user.role === 'admin'" [routerLink]="['/', 'cars',car._id]" color="primary" style="cursor: pointer;">edit</mat-icon>
+</div>

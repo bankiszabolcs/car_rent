@@ -1,0 +1,99 @@
+<app-spinner-overlay *ngIf="isLoading" [overlay]="true">
+</app-spinner-overlay>
+<div class="container">
+  <mat-toolbar>
+    <span>Autóink</span>
+  </mat-toolbar>
+  <div class="table__control" fxLayout fxLayoutAlign="space-between">
+    <div class="viewSelection">
+      <mat-button-toggle-group #group="matButtonToggleGroup">
+        <mat-button-toggle (click)="viewMode = 'table'" aria-label="Table mode On">
+          <mat-icon>table_view</mat-icon>
+        </mat-button-toggle>
+        <mat-button-toggle (click)="viewMode = 'card'" aria-label="Card mode On">
+          <mat-icon>grid_view</mat-icon>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
+    </div>
+    <button *ngIf="user?.role === 'admin'" [routerLink]="['new']" mat-raised-button>Új autó felvitele</button>
+  </div>
+  <div class="card" *ngIf="viewMode === 'card'">
+    <app-car-card [favouriteCars]="favouriteCars" [cars]="cars"></app-car-card>
+  </div>
+  <div class="table" [style.display]="viewMode === 'table'? 'block' : 'none'">
+    <mat-form-field>
+      <mat-label>Szűrő</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="BMW" #input>
+    </mat-form-field>
+    <div class="tableContainer mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource" matSort cdkDropList cdkDropListOrientation="horizontal"
+        (cdkDropListDropped)="drop($event)" multiTemplateDataRows >
+        <ng-container *ngFor="let column of carTableColumns" [matColumnDef]="column.columnDef">
+          <th mat-header-cell cdkDrag *matHeaderCellDef mat-sort-header> {{ column.header }} </th>
+          <td mat-cell *matCellDef="let row"> {{column.cell(row) | translate | name }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="expand">
+          <th mat-header-cell *matHeaderCellDef aria-label="row actions">&nbsp;</th>
+          <td mat-cell *matCellDef="let element" >
+            <button mat-icon-button aria-label="expand row"
+              (click)="(expandedElement = expandedElement === element ? null : element); $event.stopPropagation()">
+              <mat-icon *ngIf="expandedElement !== element">keyboard_arrow_down</mat-icon>
+              <mat-icon *ngIf="expandedElement === element">keyboard_arrow_up</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="expandedDetail">
+          <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+            <div class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+              <div fxLayout="row" fxLayoutAlign="space-between" style="margin: 1rem 0;">
+                <div fxLayout.lt-md="column" class="details" fxLayoutAlign="space-around">
+                  <img class="details__img--small" src="../../../assets/img/placeholder.png" alt="">
+                  <div>
+                    <ul class="details__list">
+                      <li class="details__list--item"><span>Szín:</span> {{element.features.color | translate}} </li>
+                      <li class="details__list--item"><span>Kivitel:</span> {{element.features.bodyStyle | translate}}
+                      </li>
+                      <li class="details__list--item"><span>Ajtók:</span> {{element.features.numberOfDoors}} </li>
+                      <li class="details__list--item"><span>Ülések:</span> {{element.features.numberOfSeats}} </li>
+                      <li class="details__list--item"><span>Elérhető:</span> {{element.available? 'Igen': 'Nem'}} </li>
+                    </ul>
+                  </div>
+                  <div>
+                    <ul class="details__list">
+                      <li class="details__list--item"><span>Teljesítmény:</span> {{element.features.powerHp}} LE</li>
+                      <li class="details__list--item"><span>Hengerűrtartalom</span> {{element.features.cubicCapacity}}
+                        ccm³</li>
+                      <li class="details__list--item"><span>Fogyasztás:</span> {{element.features.fuelConsumption}}
+                        l/100km</li>
+                      <li class="details__list--item"><span>Légkondi:</span> {{element.features.airCondition?
+                        'Igen':'Nem'}} </li>
+                      <li class="details__list--item"><span>Akcós:</span> {{element.discount? 'Igen':'Nem'}} </li>
+                    </ul>
+                  </div>
+                  <div fxFlexAlign="end" style="padding:1rem;">
+                    <app-car-actions [favouriteCars]="favouriteCars" [user]="user" [car]="element"
+                      [longView]="true"></app-car-actions>
+                  </div>
+                </div>
+                <app-admin-buttons [user]="user" [car]="element" *ngIf="user?.role === 'admin'"></app-admin-buttons>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplayWithExpand"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnsToDisplayWithExpand;" class="example-element-row"
+          [class.example-expanded-row]="expandedElement === row"
+          (click)="expandedElement = expandedElement === row ? null : row"></tr>
+        <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+        </tr>
+      </table>
+      <mat-paginator pageSize="25" [pageSizeOptions]="[5, 10, 25, 100]"
+        aria-label="Select page of users"></mat-paginator>
+    </div>
+  </div>
+</div>

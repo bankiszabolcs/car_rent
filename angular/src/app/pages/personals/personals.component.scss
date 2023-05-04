@@ -1,0 +1,14 @@
+.mat-tab-group {
+  margin-bottom: 48px;
+}
+
+@media only screen and (max-width: 600px) {
+  .container {
+    margin: 0.5rem;
+  }
+}
+
+.container {
+  max-width: 820px;
+  margin: 2rem auto;
+}

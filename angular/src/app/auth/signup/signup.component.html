@@ -1,0 +1,228 @@
+<form [formGroup]="userFormGroup" >
+<section class="signup-form">
+  <mat-stepper orientation="vertical" [linear]="false" #stepper>
+    <mat-step [stepControl]="userFormGroup.controls['firstFormGroup']">
+  <div formGroupName="firstFormGroup" fxLayout="column" fxLayoutGap="10px"  >
+    <ng-template matStepLabel>Add meg a fiókod adatait</ng-template>
+    <mat-form-field >
+      <mat-label>Email</mat-label>
+      <input
+      type="email"
+      matInput placeholder="nagyjani@gmail.com"
+      formControlName="email"
+     >
+  <mat-error *ngIf="userFormGroup.controls['firstFormGroup'].controls['email'].hasError('required')">Mezőt kötelező megadni!</mat-error>
+      <mat-error *ngIf="userFormGroup.controls['firstFormGroup'].controls['email'].hasError('emailUsed')">Email cím már használatban van.</mat-error>
+      <mat-error *ngIf="userFormGroup.controls['firstFormGroup'].controls['email'].hasError('email')">Helyes email cím formátum: johndoe@yahoo.com</mat-error>
+    </mat-form-field>
+    <mat-form-field >
+      <mat-label>Felhasználónév</mat-label>
+      <input
+      type="text"
+      matInput placeholder="Jani12"
+      formControlName="username">
+      <mat-error *ngIf="userFormGroup.controls['firstFormGroup'].controls['username'].hasError('usernameUsed')">Felhasználónév már használatban van.</mat-error>
+      <mat-error *ngIf="userFormGroup.controls['firstFormGroup'].controls['username'].hasError('required')">Mezőt kötelező megadni!</mat-error>
+       <mat-error
+       *ngIf="userFormGroup.controls['firstFormGroup'].controls['username'].hasError('minlength')
+       || userFormGroup.controls['firstFormGroup'].controls['username'].hasError('maxlength') "
+       >Felhasználónévnek 3-10 karakter között kell lennie! </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Jelszó</mat-label>
+      <input
+      type="password"
+      matInput placeholder="bestPassword34!"
+      formControlName="password"
+      #password>
+      <mat-hint align="end">Legalább 8 karakterből állónak kell lennie, amiből minimum 1-1 kis- és nagybetű, szám és speciális karakter. {{ password.value.length>8? 8 : password.value.length}} / 8</mat-hint>
+       <mat-error *ngIf="userFormGroup.controls['firstFormGroup'].controls['password'].hasError('required')">Mezőt kötelező megadni!</mat-error>
+      <mat-error *ngIf="userFormGroup.controls['firstFormGroup'].controls['password'].hasError('pattern')">Az általad megadott jelszó nem felel meg a követelményeknek! Legalább 8 karakterből állónak kell lennie, amiből minimum 1-1 kis- és nagybetű, szám és speciális karakter. Pl. Legjobbjelszo12.</mat-error>
+    </mat-form-field >
+    <div>
+      <button style="margin-top: 2rem;" mat-button matStepperNext>Következő</button>
+    </div>
+  </div>
+  </mat-step>
+  <mat-step [stepControl]="userFormGroup.controls['secondFormGroup']">
+    <div formGroupName="secondFormGroup" fxLayout.lt-sm="column" fxLayoutGap="10px" fxLayout="row wrap" >
+      <ng-template matStepLabel>Add meg a személyes adataid</ng-template>
+    <mat-form-field fxFlex="0 1 45%">
+      <mat-label>Keresztnév</mat-label>
+      <input
+      type="text"
+      matInput
+      placeholder="János"
+      formControlName="firstName">
+      <mat-error *ngIf="userFormGroup.controls['secondFormGroup'].controls['firstName'].hasError('required')">Mezőt kötelező megadni!</mat-error>
+      <mat-error *ngIf="userFormGroup.controls['secondFormGroup'].controls['firstName'].hasError('pattern')">Keresztnévnek nagy kezdőbetűvel kell kezdődnie és minimum 2 maximum 30 karakter lehet!</mat-error>
+    </mat-form-field>
+ <mat-form-field fxFlex="0 1 45%">
+      <mat-label>Vezetéknév</mat-label>
+      <input
+      type="text"
+      matInput
+      placeholder="Nagy"
+      formControlName="lastName">
+      <mat-error *ngIf="userFormGroup.controls['secondFormGroup'].controls['lastName'].hasError('required')">Mezőt kötelező megadni!</mat-error>
+      <mat-error *ngIf="userFormGroup.controls['secondFormGroup'].controls['lastName'].hasError('pattern')">Vezetéknévnek nagy kezdőbetűvel kell kezdődnie és minimum 2 maximum 30 karakter lehet!</mat-error>
+     </mat-form-field>
+    <mat-form-field fxFlex="0 1 45%" hintLabel="A regisztrációhoz, így a foglaláshoz is követelmény a betöltött 18. életév.">
+      <input
+        matInput
+        placeholder="Születési idő"
+        [matDatepicker]="picker"
+        [max]="maxDate"
+        formControlName="birthDate"
+        required>
+      <mat-datepicker-toggle
+        matSuffix
+        [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error *ngIf="userFormGroup.controls['secondFormGroup'].controls['birthDate'].hasError('required')">Mezőt kötelező megadni!</mat-error>
+    </mat-form-field>
+
+    <mat-form-field fxFlex="0 1 45%">
+      <mat-label>Telefonszám</mat-label>
+      <input
+      name="phone"
+      type="text"
+      matInput
+      placeholder="+36205505500"
+      formControlName="phone">
+      <mat-error *ngIf="userFormGroup.controls['secondFormGroup'].controls['phone'].hasError('required')">Mezőt kötelező megadni!</mat-error>
+      <mat-error *ngIf="userFormGroup.controls['secondFormGroup'].controls['phone'].hasError('pattern')">Helyes megadási formátum: +36204205600</mat-error>
+    </mat-form-field>
+    <div fxFlex="0 1 45%" class="secondFormGroup">
+      <button mat-button matStepperPrevious>Előző</button>
+      <button mat-button matStepperNext>Következő</button>
+    </div>
+  </div>
+</mat-step>
+<mat-step [stepControl]="userFormGroup.controls['thirdFormGroup']">
+<div formGroupName="thirdFormGroup" fxLayout.lt-sm="column" fxLayoutGap="10px" fxLayout="row wrap">
+  <ng-template matStepLabel>Add meg az igazolványod adatait</ng-template>
+  <mat-form-field fxFlex="0 1 45%">
+    <mat-label>Személyigazolvány szám</mat-label>
+    <input
+    type="text"
+    matInput
+    placeholder="212004TA"
+    formControlName="personalId">
+    <mat-error *ngIf="userFormGroup.controls['thirdFormGroup'].controls['personalId'].hasError('required')">Mezőt kötelező megadni!</mat-error>
+    <mat-error
+    *ngIf="userFormGroup.controls['thirdFormGroup'].controls['personalId'].hasError('minlength')
+    || userFormGroup.controls['thirdFormGroup'].controls['personalId'].hasError('maxlength') "
+    >Személyigazolvány számának 5-10 karakter között kell lennie! </mat-error>
+     </mat-form-field>
+  <mat-form-field fxFlex="0 1 45%">
+    <mat-label>Jogosítvány</mat-label>
+    <input
+    type="text"
+    matInput
+    placeholder="121441TA"
+    formControlName="drivingLicense">
+    <mat-error *ngIf="userFormGroup.controls['thirdFormGroup'].controls['drivingLicense'].hasError('required')">Mezőt kötelező megadni!</mat-error>
+    <mat-error
+    *ngIf="userFormGroup.controls['thirdFormGroup'].controls['drivingLicense'].hasError('minlength')
+    || userFormGroup.controls['thirdFormGroup'].controls['drivingLicense'].hasError('maxlength') "
+    >Jogosítvány számának 5-10 karakter között kell lennie! </mat-error>
+  </mat-form-field>
+  <div fxFlex="0 1 45%">
+    <button mat-button matStepperPrevious>Előző</button>
+    <button mat-button matStepperNext>Következő</button>
+  </div>
+  </div>
+</mat-step>
+<mat-step [stepControl]="userFormGroup.controls['fourthFormGroup']">
+  <div formGroupName="fourthFormGroup" fxLayout.lt-sm="column" fxLayoutGap="10px" fxLayout="row wrap">
+    <ng-template matStepLabel>Add meg a lakcím adataid</ng-template>
+    <mat-form-field fxFlex="0 1 45%">
+      <mat-label>Város</mat-label>
+      <input
+      type="text"
+      matInput
+      placeholder="Budapest"
+      formControlName="city">
+      <mat-error *ngIf="userFormGroup.controls['fourthFormGroup'].controls['city'].hasError('required')">Mezőt kötelező megadni!</mat-error>
+      <mat-error
+      *ngIf="userFormGroup.controls['fourthFormGroup'].controls['city'].hasError('minlength')
+      || userFormGroup.controls['fourthFormGroup'].controls['city'].hasError('maxlength') "
+      >Városnak 5-20 karakter között kell lennie! </mat-error>
+     </mat-form-field>
+    <mat-form-field fxFlex="0 1 45%">
+      <mat-label>Út/Utca</mat-label>
+      <input
+      type="text"
+      matInput
+      placeholder="Kossuth Lajos"
+      formControlName="street">
+      <mat-error *ngIf="userFormGroup.controls['fourthFormGroup'].controls['street'].hasError('required')">Mezőt kötelező megadni!</mat-error>
+      <mat-error
+      *ngIf="userFormGroup.controls['fourthFormGroup'].controls['street'].hasError('minlength')
+      || userFormGroup.controls['fourthFormGroup'].controls['street'].hasError('maxlength') "
+      >Utcának 5-40 karakter között kell lennie! </mat-error>
+    </mat-form-field>
+    <mat-form-field fxFlex="0 1 45%">
+      <mat-label>Házszám</mat-label>
+      <input
+      type="number"
+      matInput
+      placeholder="22"
+      formControlName="houseNumber">
+      <mat-error *ngIf="userFormGroup.controls['fourthFormGroup'].controls['houseNumber'].hasError('required')">Mezőt kötelező megadni!</mat-error>
+    </mat-form-field>
+    <mat-form-field fxFlex="0 1 45%">
+      <mat-label>Emelet</mat-label>
+      <input
+      type="number"
+      matInput
+      placeholder="1"
+      formControlName="floor">
+      <mat-hint align="end">Nem kötelező megadni</mat-hint>
+    </mat-form-field>
+    <mat-form-field fxFlex="0 1 45%">
+      <mat-label>Ajtó</mat-label>
+      <input
+      type="number"
+      matInput
+      placeholder="98"
+      formControlName="flatNumber">
+      <mat-hint align="end">Nem kötelező megadni</mat-hint>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Irányítószám</mat-label>
+      <input
+      type="number"
+      matInput
+      placeholder="1115"
+      formControlName="zip">
+      <mat-error *ngIf="userFormGroup.controls['fourthFormGroup'].controls['zip'].hasError('required')">Mezőt kötelező megadni!</mat-error>
+    </mat-form-field>
+    <div fxFlex="0 1 45%">
+      <button mat-button matStepperPrevious>Előző</button>
+      <button mat-button matStepperNext>Következő</button>
+    </div>
+    </div>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Kész</ng-template>
+    <div fxLayout="row" fxLayoutAlign="start center" style="margin-bottom: 5px;" *ngIf="userFormGroup.valid">
+      <span style="padding-left: 12px">Sikeresen kitöltötted az űrlapot!</span>
+      <mat-icon style="color: #26b526;" >done_all</mat-icon>
+    </div>
+    <div fxLayout="row" fxLayoutAlign="start center" style="margin-bottom: 5px;" *ngIf="userFormGroup.invalid">
+      <span style="padding-left: 12px">Ellenőrízd az űrlapot!</span>
+      <mat-icon style="color: #b52400;" >close</mat-icon>
+    </div>
+    <div>
+      <button style="margin-bottom: 5px" mat-button matStepperPrevious>Előző</button>
+    </div>
+    <div fxLayout fxLayoutGap="10px">
+      <mat-checkbox #agreeCheckbox required color="primary">Elfogadom az ÁSZF-et.</mat-checkbox>
+      <button  [disabled]="!agreeCheckbox.checked || userFormGroup.invalid" type="submit" mat-raised-button color="primary" (click)="onSubmit()">Küldés</button>
+    </div>
+  </mat-step>
+</mat-stepper>
+</section>
+</form>

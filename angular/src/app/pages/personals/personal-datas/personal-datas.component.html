@@ -1,0 +1,70 @@
+<h3>Profil adatok</h3>
+<mat-list>
+  <mat-list-item>
+    <span matListItemTitle>Email:</span>
+    <span matListItemLine>{{ user.email }}</span>
+  </mat-list-item>
+  <mat-list-item>
+    <span matListItemTitle>Felhasználónév:</span>
+    <span matListItemLine>{{ user.username }}</span>
+  </mat-list-item>
+</mat-list>
+
+<h3>Személyes adatok</h3>
+<mat-list>
+  <mat-list-item>
+    <span matListItemTitle>Keresztnév</span>
+    <span matListItemLine>{{ user.firstName }}</span>
+  </mat-list-item>
+  <mat-list-item>
+    <span matListItemTitle>Vezetéknév</span>
+    <span matListItemLine>{{ user.lastName }}</span>
+  </mat-list-item>
+  <mat-list-item>
+    <span matListItemTitle>Születési dátum</span>
+    <span matListItemLine>{{ user.birthDate | date }}</span>
+  </mat-list-item>
+  <mat-list-item>
+    <span matListItemTitle>Telefonszám</span>
+    <span matListItemLine>{{ user.phone }}</span>
+  </mat-list-item>
+  <mat-list-item>
+    <span matListItemTitle>Személyi igazolvány</span>
+    <span matListItemLine>{{ user.personalId }}</span>
+  </mat-list-item>
+  <mat-list-item>
+    <span matListItemTitle>Jogosítvány</span>
+    <span matListItemLine>{{ user.drivingLicense }}</span>
+  </mat-list-item>
+</mat-list>
+
+<h3>Lakcím</h3>
+<mat-list>
+  <mat-list-item>
+    <span matListItemTitle>Város</span>
+    <span matListItemLine>{{ user.address.city }}</span>
+  </mat-list-item>
+  <mat-list-item>
+    <span matListItemTitle>Út/Utca</span>
+    <span matListItemLine>{{ user.address.street }}</span>
+  </mat-list-item>
+  <mat-list-item>
+    <span matListItemTitle>Házszám</span>
+    <span matListItemLine>{{ user.address.houseNumber }}</span>
+  </mat-list-item>
+  <mat-list-item *ngIf="user.address.floor">
+    <span matListItemTitle>Emelet</span>
+    <span matListItemLine>{{ user.address.floor }}</span>
+  </mat-list-item>
+  <mat-list-item *ngIf="user.address.flatNumber">
+    <span matListItemTitle>Ajtó</span>
+    <span matListItemLine>{{ user.address.flatNumber }}</span>
+  </mat-list-item>
+  <mat-list-item>
+    <span matListItemTitle>Irányítószám</span>
+    <span matListItemLine>{{ user.address.zip }}</span>
+  </mat-list-item>
+</mat-list>
+<div class="btn__container" fxLayoutAlign="center" fxLayout="row">
+  <button [routerLink]="['..', 'users', user._id]" mat-stroked-button color="primary" style="display: block; width: 80%;">Adatok módosítása</button>
+</div>

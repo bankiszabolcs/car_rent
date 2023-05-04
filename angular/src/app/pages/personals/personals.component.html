@@ -1,0 +1,14 @@
+<app-spinner-overlay *ngIf="isLoading" [overlay]="true">
+</app-spinner-overlay>
+<div class="container">
+<div class="container" *ngIf="user">
+  <mat-toolbar>
+    <span>Adatlapom</span>
+  </mat-toolbar>
+  <mat-tab-group animationDuration="1ms" [(selectedIndex)]=selectedPage>
+    <mat-tab label="Adatok"><app-personal-datas [user]="user"></app-personal-datas></mat-tab>
+    <mat-tab label="Kedvenc autók"><app-car-card (favouriteCarsChanged)="onFavCarChanged()" *ngIf="user.favourites!.length > 0" [favouriteCars]="favouriteCars" [cars]="favouriteCars"></app-car-card></mat-tab>
+    <mat-tab label="Foglalásaim"><app-order-table  (orderRemoved)="renderOrders()" [dataSource]="dataSource"></app-order-table></mat-tab>
+  </mat-tab-group>
+</div>
+

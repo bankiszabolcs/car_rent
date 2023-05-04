@@ -1,0 +1,23 @@
+<div class="short" *ngIf="!longView">
+<button *ngIf="!isFavourite(car._id!!)" (click)="toggleFavourite(car)" mat-icon-button color="warn" matTooltip="Kedvenceimhez ad!">
+  <mat-icon >favorite_outlined</mat-icon>
+</button>
+<button *ngIf="isFavourite(car._id!)" (click)="toggleFavourite(car)" mat-icon-button color="warn" matTooltip="Kedvenceimből kitörlöm!">
+  <mat-icon >favorite</mat-icon>
+</button>
+<button (click)="openDialog(car)" mat-icon-button color="primary" [disabled]="!car.available" matTooltip="Lefoglalom ezt az autót!">
+  <mat-icon>book</mat-icon>
+</button>
+</div>
+<div class="long" *ngIf="longView" fxLayout fxLayoutGap="10px" >
+  <button *ngIf="!isFavourite(car._id!)" (click)="toggleFavourite(car)" mat-flat-button color="warn" matTooltip="Kedvenceimhez ad!">
+    <mat-icon >favorite_outlined</mat-icon> Tetszik
+  </button>
+  <button *ngIf="isFavourite(car._id!)" (click)="toggleFavourite(car)" mat-flat-button color="warn" matTooltip="Kedvenceimből kitörlöm!">
+    <mat-icon >favorite</mat-icon>  Törlés
+  </button>
+  <button (click)="openDialog(car)" mat-flat-button color="primary" [disabled]="!car.available" matTooltip="Lefoglalom ezt az autót!">
+    <mat-icon>book</mat-icon> Foglal
+  </button>
+  </div>
+
